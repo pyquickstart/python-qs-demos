@@ -10,7 +10,7 @@ from peewee import (
     TextField,
 )
 
-db = SqliteDatabase("module08.sqlite")
+db = SqliteDatabase("portfolio.db")
 
 
 class CryptoTransaction(Model):

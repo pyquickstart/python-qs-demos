@@ -67,6 +67,24 @@ def lookup_price(
     console = Console()
     console.print(output)
 
+@app.command("history")
+def view_history():
+    table = Table(title="Transaction History")
+    table.add_column("Date", style="cyan")
+    table.add_column("Coin", style="blue")
+    table.add_column("Amount", style="green")
+    table.add_column("Type", style="magenta")
+    table.add_column("Notes", style="yellow")
+
+    for transaction in CryptoTransaction.select().order_by(CryptoTransaction.coin, CryptoTransaction.timestamp.desc()):
+        date_str = transaction.timestamp.strftime("%Y-%m-%d")
+        type_str = "Buy" if transaction.buy else "Sell"
+        notes_str = transaction.notes if transaction.notes else ""
+        table.add_row(date_str, transaction.coin.capitalize(), f"{transaction.amount}", type_str, notes_str)
+
+    console = Console()
+    console.print(table)
+
 
 if __name__ == "__main__":
     app()
