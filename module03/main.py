@@ -1,67 +1,99 @@
-# functions
+# dictionaries
+
 import datetime
 
-def create_transaction(coin, amount, buy, timestamp, notes):
-    transaction = {
-        "coin": coin,
-        "amount": amount,
-        "buy": buy,
-        "timestamp": timestamp,
-        "notes": notes,
-    }
+transaction = {
+    "coin": "bitcoin",
+    "amount": 0.5,
+    "buy": True,
+    "timestamp": datetime.date(2026, 2, 20),
+}
 
-    return transaction
+transaction_2 = {
+    "coin": "ethereum",
+    "amount": 1.1,
+    "buy": True,
+    "timestamp": datetime.date(2026, 2, 21),
+}
 
-transaction = create_transaction("bitcoin", 0.5, True, datetime.date(2026, 2, 20))
-print(transaction["coin"])      # bitcoin
+print(f"{transaction['amount']} of {transaction['coin']}")  # 0.5 of bitcoin
 
-transactions = []
-transactions.append(create_transaction("bitcoin", 0.5, True, datetime.date(2026, 2, 20), "Note one"))
-transactions.append(create_transaction("ethereum", 1.1, True, datetime.date(2026, 2, 21), "Note two"))
-transactions.append(create_transaction("bitcoin", 0.25, False, datetime.date(2026, 2, 22), "Note three"))
+transaction["amount"] = 0.6
+transaction["notes"] = "A transaction for a Bitcoin purchase"
+del transaction["notes"]
 
-def display_transaction(transaction):
+print(transaction["notes"])     # raises KeyError
+
+notes_exist = "notes" in transaction    # False
+
+if "notes" in transaction:
+    print(transaction["notes"])
+else:
+    print("The transaction has no notes")
+
+# lists
+
+transactions = [transaction, transaction_2]
+
+transaction_3 = {
+    "coin": "bitcoin",
+    "amount": 0.25,
+    "timestamp": datetime.date(2026, 2, 22),
+    "buy": False # sell
+}
+
+transactions.append(transaction_3)
+
+first_transaction = transactions[0]
+second_transaction = transactions[1]
+
+if 1 < len(transactions):
+    transaction = transactions[1]
+    print(transaction["coin"])
+else:
+    print("Transaction not found")
+
+# exception handling
+
+try:
+    transaction = transactions[1]
+    print(transaction["coin"])
+except IndexError:
+    print("Transaction not found")
+
+try:
+    print(transaction["notes"])
+except KeyError:
+    print("Transaction has no notes")
+
+
+# loops
+
+for transaction in transactions:
+    print(transaction["coin"])
+
+for transaction in transactions:
+    formatted_timestamp = transaction["timestamp"].strftime("%b. %e, %Y")
     coin = transaction["coin"]
     amount = transaction["amount"]
     action = "Bought" if transaction["buy"] else "Sold"
-    formatted_timestamp = transaction["timestamp"].strftime('%b. %e, %Y')
     notes = transaction["notes"] if "notes" in transaction else "No notes found"
 
     print(f"Transaction on {formatted_timestamp}")
     print(f"{action} {amount} of {coin}")
     print(f"Notes: {notes}")
-    print("")
 
-for transaction in transactions:
-    display_transaction(transaction)
+try:
+    transaction = transactions[1]
+    formatted_timestamp = transaction["timestamp"].strftime("%b. %e, %Y")
+    coin = transaction["coin"]
+    amount = transaction["amount"]
+    action = "Bought" if transaction["buy"] else "Sold"
+    notes = transaction["notes"] if "notes" in transaction else "No notes found"
 
-def create_transaction(coin, amount, buy, notes):
-    transaction = {
-        "coin": coin,
-        "amount": amount,
-        "buy": buy,
-        "notes": notes,
-        "timestamp": datetime.date.today(),
-    }
-
-    return transaction
-
-def create_transaction(coin, amount, buy=True, notes=None):
-    transaction = {
-        "coin": coin,
-        "amount": amount,
-        "buy": buy,
-        "timestamp": datetime.date.today()
-    }
-
-    if notes is not None:
-        transaction["notes"] = notes
-
-    return transaction
-
-transaction = create_transaction("bitcoin", 0.5)
-transaction = create_transaction("bitcoin", 0.25, False)
-transaction = create_transaction("bitcoin", 0.25, False, "Selling one quarter bitcoin")
-transaction = create_transaction("bitcoin", 0.5, notes="Buying one half a bitcoin")
-transaction = create_transaction(amount=0.5, buy=True, notes="Buying one half a bitcoin", coin="bitcoin")
+    print(f"Transaction on {formatted_timestamp}")
+    print(f"{action} {amount} of {coin}")
+    print(f"Notes: {notes}")
+except IndexError:
+    print("Transaction not found")
 

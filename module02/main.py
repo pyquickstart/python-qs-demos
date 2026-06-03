@@ -1,99 +1,35 @@
-# dictionaries
+# variables for a cryptocurrency transaction
+coin = "bitcoin"    # str
+amount = 0.5        # float
+buy = True          # bool
 
-import datetime
+import datetime     # import the datetime module
+timestamp = datetime.date(2026, 2, 20) # date
 
-transaction = {
-    "coin": "bitcoin",
-    "amount": 0.5,
-    "buy": True,
-    "timestamp": datetime.date(2026, 2, 20),
-}
+# display the values of the variables
 
-transaction_2 = {
-    "coin": "ethereum",
-    "amount": 1.1,
-    "buy": True,
-    "timestamp": datetime.date(2026, 2, 21),
-}
+print(coin)         # bitcoin
+print(amount)       # 0.5
+print(buy)          # True
+print(timestamp)    # 2026-02-20
 
-print(f"{transaction['amount']} of {transaction['coin']}")  # 0.5 of bitcoin
+print(timestamp.strftime("%b. %e, %Y"))     # Feb. 20, 2026
 
-transaction["amount"] = 0.6
-transaction["notes"] = "A transaction for a Bitcoin purchase"
-del transaction["notes"]
+print(f"Transaction for {amount} {coin} on {timestamp.strftime('%b. %e, %Y')}")
+# Transaction for 0.5 bitcoin on Feb. 20, 2026
 
-print(transaction["notes"])     # raises KeyError
+# conditionals
 
-notes_exist = "notes" in transaction    # False
+print(f"{buy} {amount} of {coin} on {timestamp.strftime('%b. %e, %Y')}")
+# True 0.5 of bitcoin on Feb. 20, 2026
 
-if "notes" in transaction:
-    print(transaction["notes"])
+if buy == True:
+    action = "Bought"
 else:
-    print("The transaction has no notes")
+    action = "Sold"
 
-# lists
+print(f"{action} {amount} of {coin} on {timestamp.strftime('%b. %e, %Y')}")
+# Bought 0.5 of bitcoin on Feb. 20, 2026
 
-transactions = [transaction, transaction_2]
-
-transaction_3 = {
-    "coin": "bitcoin",
-    "amount": 0.25,
-    "timestamp": datetime.date(2026, 2, 22),
-    "buy": False # sell
-}
-
-transactions.append(transaction_3)
-
-first_transaction = transactions[0]
-second_transaction = transactions[1]
-
-if 1 < len(transactions):
-    transaction = transactions[1]
-    print(transaction["coin"])
-else:
-    print("Transaction not found")
-
-# exception handling
-
-try:
-    transaction = transactions[1]
-    print(transaction["coin"])
-except IndexError:
-    print("Transaction not found")
-
-try:
-    print(transaction["notes"])
-except KeyError:
-    print("Transaction has no notes")
-
-
-# loops
-
-for transaction in transactions:
-    print(transaction["coin"])
-
-for transaction in transactions:
-    formatted_timestamp = transaction["timestamp"].strftime("%b. %e, %Y")
-    coin = transaction["coin"]
-    amount = transaction["amount"]
-    action = "Bought" if transaction["buy"] else "Sold"
-    notes = transaction["notes"] if "notes" in transaction else "No notes found"
-
-    print(f"Transaction on {formatted_timestamp}")
-    print(f"{action} {amount} of {coin}")
-    print(f"Notes: {notes}")
-
-try:
-    transaction = transactions[1]
-    formatted_timestamp = transaction["timestamp"].strftime("%b. %e, %Y")
-    coin = transaction["coin"]
-    amount = transaction["amount"]
-    action = "Bought" if transaction["buy"] else "Sold"
-    notes = transaction["notes"] if "notes" in transaction else "No notes found"
-
-    print(f"Transaction on {formatted_timestamp}")
-    print(f"{action} {amount} of {coin}")
-    print(f"Notes: {notes}")
-except IndexError:
-    print("Transaction not found")
-
+print(f"{'Bought'if buy == True else 'Sold'} {amount} of {coin} on {timestamp.strftime('%b. %e, %Y')}")
+# Bought 0.5 of bitcoin on Feb. 20, 2026
