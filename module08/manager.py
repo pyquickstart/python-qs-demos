@@ -37,15 +37,24 @@ def view_portfolio(currency: Annotated[str, typer.Option("--currency", "-c")] = 
             coin_amounts[transaction.coin] -= transaction.amount
 
     table = Table(title="Current Portfolio")
-    table.add_column("Coin", style="cyan")
+    table.add_column("Coin", style="cyan", no_wrap=True)
     table.add_column("Amount", style="green")
     table.add_column("Current Value", style="magenta")
     price_data = get_current_price(list(coin_amounts.keys()), currency)
+    total_value = 0.0
     for coin in price_data:
         price = price_data[coin][currency]
         amount = coin_amounts[coin]
         value = amount * price
+        total_value += value
         table.add_row(coin.capitalize(), f"{amount}", f"{value:.2f} {currency.upper()}")
+
+    table.add_section()
+    table.add_row(
+        "[bold white]TOTAL[/bold white]",
+        "",
+        f"[bold yellow]{total_value:.2f} {currency.upper()}[/bold yellow]",
+    )
 
     console = Console()
     console.print(table)
@@ -67,6 +76,7 @@ def lookup_price(
     console = Console()
     console.print(output)
 
+
 @app.command("history")
 def view_history():
     table = Table(title="Transaction History")
@@ -76,11 +86,19 @@ def view_history():
     table.add_column("Type", style="magenta")
     table.add_column("Notes", style="yellow")
 
-    for transaction in CryptoTransaction.select().order_by(CryptoTransaction.coin, CryptoTransaction.timestamp.desc()):
+    for transaction in CryptoTransaction.select().order_by(
+        CryptoTransaction.coin, CryptoTransaction.timestamp.desc()
+    ):
         date_str = transaction.timestamp.strftime("%Y-%m-%d")
         type_str = "Buy" if transaction.buy else "Sell"
         notes_str = transaction.notes if transaction.notes else ""
-        table.add_row(date_str, transaction.coin.capitalize(), f"{transaction.amount}", type_str, notes_str)
+        table.add_row(
+            date_str,
+            transaction.coin.capitalize(),
+            f"{transaction.amount}",
+            type_str,
+            notes_str,
+        )
 
     console = Console()
     console.print(table)
